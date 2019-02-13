@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
-public class Shark : MonoBehaviour {
-
+public class Shark : FallingObject
+{
     [Header("Visual Effects")]
     public ParticleSystem visualEffect;
 
@@ -13,23 +12,14 @@ public class Shark : MonoBehaviour {
     public AudioSource reachLowerLimit;
     public AudioSource onClick;
 
-    private float fallSpeed;
-    private float maxSpeed;
-
-    private int scoreCorrectPassed;
-
-    private bool haveBeenClickedThrice = false;
-    private int numberOfClicks = 0;
-    private bool haveBeenScored = false;
-
-    private WordManager wordManager;
+    private bool haveBeenClickedThrice;
+    private int numberOfClicks;
 
     private GameObject exhaustedFish;
 
-    void Start()
+    public override void Start()
     {
-        wordManager = GameObject.FindGameObjectWithTag("Word Manager").GetComponent<WordManager>();
-        SetValuesFromWordManager();
+        base.Start();
         fallSpeed = maxSpeed + 0.3f;
         IEnumerable<GameObject> exhaustedFishes = GameObject.FindGameObjectsWithTag("Exhausted Fish").AsEnumerable();
         exhaustedFishes = exhaustedFishes.OrderBy(exhaustedFish => (exhaustedFish.transform.position - transform.position).sqrMagnitude);
@@ -44,39 +34,43 @@ public class Shark : MonoBehaviour {
         }
     }
 
-    void Update()
+    public override void Update()
     {
         transform.Translate(0f, -fallSpeed * Time.deltaTime, 0);
         if (exhaustedFish != null)
             if ((exhaustedFish.transform.position - transform.position).sqrMagnitude < 0.3f && haveBeenClickedThrice == false)
                 Destroy(exhaustedFish);
         if (transform.position.y < -3.6f)
+            ReachedLowerLimit();
+    }
+
+
+    public override void ReachedLowerLimit()
+    {
+        if (haveBeenClickedThrice == false && haveBeenScored == false)
         {
-            if (haveBeenClickedThrice == false && haveBeenScored == false)
-            {
-                wordManager.SetScore(scoreCorrectPassed);
-                GetComponent<TextMeshProUGUI>().text = "";
-                haveBeenClickedThrice = true;
-                haveBeenScored = true;
-                reachLowerLimit.Play();
-                visualEffect.Stop();
-                Destroy(gameObject, 2f);
-            }
+            wordManager.AdjustScore(scoreMatchPassed);
+            objectText.text = "";
+            haveBeenClickedThrice = true;
+            haveBeenScored = true;
+            reachLowerLimit.Play();
+            visualEffect.Stop();
+            Destroy(gameObject, 2f);
         }
     }
 
-    private void SetValuesFromWordManager()
+    public override void SetValuesFromWordManager()
     {
         maxSpeed = wordManager.maxSpeed;
-        scoreCorrectPassed = wordManager.scoreCorrectPassed;
+        scoreMatchPassed = wordManager.scoreCorrectPassed;
     }
 
-    private void OnMouseDown()
+    public override void OnMouseDown()
     {
         numberOfClicks++;
         if (numberOfClicks == 3 && haveBeenClickedThrice == false)
         {
-            GetComponent<TextMeshProUGUI>().text = "";
+            objectText.text = "";
             haveBeenClickedThrice = true;
             haveBeenScored = true;
             onClick.Play();

@@ -1,60 +1,43 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ExhaustedFish : MonoBehaviour
+public class ExhaustedFish : FallingObject
 {
     [Header("Sound Effects")]
     public AudioSource onSpawn;
     public AudioSource reachLowerLimit;
     public AudioSource onClick;
 
-    private float fallSpeed;
-    private float minSpeed;
-    private float maxSpeed;
+    private bool hunted;
 
-    private int scorePassed;
-
-    private bool haveBeenClicked = false;
-    private bool haveBeenScored = false;
-
-    private WordManager wordManager;
-
-    private bool hunted = false;
-
-    void Start()
+    public override void Start()
     {
-        wordManager = GameObject.FindGameObjectWithTag("Word Manager").GetComponent<WordManager>();
-        SetValuesFromWordManager();
-        fallSpeed = Random.Range(minSpeed - 0.1f, maxSpeed - 0.1f);
+        base.Start();
+        fallSpeed -= 0.1f;
     }
 
-    void Update()
+    public override void ReachedLowerLimit()
     {
-        transform.Translate(0f, -fallSpeed * Time.deltaTime, 0);
-        if (transform.position.y < -3.6f)
+        if (!haveBeenScored)
         {
-            if (haveBeenScored == false)
-            {
-                wordManager.SetScore(scorePassed);
-                GetComponent<TextMeshProUGUI>().text = "";
-                haveBeenClicked = true;
-                haveBeenScored = true;
-                reachLowerLimit.Play();
-                Destroy(gameObject, 2f);
-            }
+            wordManager.AdjustScore(scoreMatchPassed);
+            objectText.text = "";
+            haveBeenClicked = true;
+            haveBeenScored = true;
+            reachLowerLimit.Play();
+            Destroy(gameObject, 2f);
         }
     }
 
-    private void SetValuesFromWordManager()
+    public override void SetValuesFromWordManager()
     {
         minSpeed = wordManager.minSpeed;
         maxSpeed = wordManager.maxSpeed;
-        scorePassed = wordManager.scoreCorrectPress;
+        scoreMatchPassed = wordManager.scoreCorrectPress;
     }
 
-    private void OnMouseDown()
+    public override void OnMouseDown()
     {
-        if (haveBeenClicked == false)
+        if (!haveBeenClicked)
         {
             haveBeenClicked = true;
             onClick.Play();

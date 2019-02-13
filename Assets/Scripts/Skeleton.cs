@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using TMPro;
 
-public class Skeleton : MonoBehaviour {
-
+public class Skeleton : FallingObject
+{
     [Header("Visual Effects")]
     public ParticleSystem visualEffect;
 
@@ -11,65 +10,38 @@ public class Skeleton : MonoBehaviour {
     public AudioSource reachLowerLimit;
     public AudioSource onClick;
 
-    private float fallSpeed;
-    private float minSpeed;
-    private float maxSpeed;
-
-    private int scoreCorrectPress;
-    private int scoreCorrectPassed;
-
-    private bool haveBeenClicked = false;
-    private bool haveBeenScored = false;
-
-    private WordManager wordManager;
-
-    void Start()
+    public override void ReachedLowerLimit()
     {
-        wordManager = GameObject.FindGameObjectWithTag("Word Manager").GetComponent<WordManager>();
-        SetValuesFromWordManager();
-        fallSpeed = Random.Range(minSpeed, maxSpeed);
-    }
-
-    void Update()
-    {
-        transform.Translate(0f, -fallSpeed * Time.deltaTime, 0);
-        if (transform.position.y < -3.6f)
+        if (!haveBeenClicked && !haveBeenScored)
         {
-            if (haveBeenClicked == false && haveBeenScored == false)
-            {
-                wordManager.SetScore(scoreCorrectPassed);
-                GetComponent<TextMeshProUGUI>().text = "";
-                haveBeenClicked = true;
-                haveBeenScored = true;
-                reachLowerLimit.Play();
-                visualEffect.Stop();
-                Destroy(gameObject, 2f);
-                GameObject[] words = GameObject.FindGameObjectsWithTag("Word");
-                foreach (GameObject word in words)
-                {
-                    if (word.transform.position.y > this.transform.position.y && word.GetComponent<Word>().GetHaveBeenClicked() == false)
-                    {
-                        Destroy(word);
-                    }
-                }
-            }
+            wordManager.AdjustScore(scoreMatchPassed);
+            objectText.text = "";
+            haveBeenClicked = true;
+            haveBeenScored = true;
+            reachLowerLimit.Play();
+            visualEffect.Stop();
+            Destroy(gameObject, 2f);
+            GameObject[] activeMatches = GameObject.FindGameObjectsWithTag("Word");
+            foreach (GameObject match in activeMatches)
+                if (match.transform.position.y > this.transform.position.y && match.GetComponent<Word>().GetHaveBeenClicked() == false)
+                    Destroy(match);
         }
     }
 
-    private void SetValuesFromWordManager()
+    public override void SetValuesFromWordManager()
     {
         minSpeed = wordManager.minSpeed;
         maxSpeed = wordManager.maxSpeed;
-        scoreCorrectPress = wordManager.scoreCorrectPress;
-        scoreCorrectPassed = wordManager.scoreCorrectPassed;
+        scoreMatchClicked = wordManager.scoreCorrectPress;
+        scoreMatchPassed = wordManager.scoreCorrectPassed;
     }
 
-    private void OnMouseDown()
+    public override void OnMouseDown()
     {
-        if (haveBeenClicked == false)
+        if (!haveBeenClicked)
         {
-            wordManager.SetScore(scoreCorrectPress);
-            GetComponent<TextMeshProUGUI>().text = "";
+            wordManager.AdjustScore(scoreMatchClicked);
+            objectText.text = "";
             haveBeenClicked = true;
             haveBeenScored = true;
             onClick.Play();

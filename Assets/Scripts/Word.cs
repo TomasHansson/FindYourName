@@ -39,7 +39,7 @@ public class Word : MonoBehaviour {
         {
             if (word.text != wordManager.GetCurrentName() && haveBeenClicked == false && haveBeenScored == false)
             {
-                wordManager.SetScore(scoreIncorrectPassed);
+                wordManager.AdjustScore(scoreIncorrectPassed);
                 word.text = "";
                 haveBeenClicked = true;
                 haveBeenScored = true;
@@ -49,7 +49,7 @@ public class Word : MonoBehaviour {
             }
             else if (word.text == wordManager.GetCurrentName() && haveBeenClicked == false)
             {
-                wordManager.SetScore(scoreCorrectPassed);
+                wordManager.AdjustScore(scoreCorrectPassed);
                 word.text = "";
                 haveBeenClicked = true;
                 clickIncorrect.Play();
@@ -80,7 +80,7 @@ public class Word : MonoBehaviour {
     {
         if (word.text == wordManager.GetCurrentName() && haveBeenClicked == false)
         {
-            wordManager.SetScore(scoreCorrectPress);
+            wordManager.AdjustScore(scoreCorrectPress);
             haveBeenClicked = true;
             haveBeenScored = true;
             playOnDestory.Play();
@@ -90,7 +90,7 @@ public class Word : MonoBehaviour {
         }
         else if (haveBeenClicked == false)
         {
-            wordManager.SetScore(scoreIncorrectPress);
+            wordManager.AdjustScore(scoreIncorrectPress);
             haveBeenClicked = true;
             haveBeenScored = true;
             word.color = Color.black;

@@ -109,7 +109,7 @@ public class WordManager : MonoBehaviour {
         return currentNameText.text;
     }
 
-    public void SetScore(int adjustment)
+    public void AdjustScore(int adjustment)
     {
         if (PlayerPrefs.GetString("PlayMode", "Practice") == "Practice")
         {
