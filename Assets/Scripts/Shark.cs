@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Shark : FallingObject
 {
@@ -21,17 +19,11 @@ public class Shark : FallingObject
     {
         base.Start();
         fallSpeed = maxSpeed + 0.3f;
-        IEnumerable<GameObject> exhaustedFishes = GameObject.FindGameObjectsWithTag("Exhausted Fish").AsEnumerable();
-        exhaustedFishes = exhaustedFishes.OrderBy(exhaustedFish => (exhaustedFish.transform.position - transform.position).sqrMagnitude);
-        foreach (GameObject _exhaustedFish in exhaustedFishes)
-        {
-            if (_exhaustedFish.GetComponent<ExhaustedFish>().GetHunted() == false)
-            {
-                exhaustedFish = _exhaustedFish;
-                exhaustedFish.GetComponent<ExhaustedFish>().SetHunted(true);
-                break;
-            }
-        }
+    }
+
+    public void SetPrey(GameObject _exhaustedFish)
+    {
+        exhaustedFish = _exhaustedFish;
     }
 
     public override void Update()

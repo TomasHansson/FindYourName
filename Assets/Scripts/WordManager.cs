@@ -210,15 +210,16 @@ public class WordManager : MonoBehaviour {
         else if (chance < match + randomMismatch + crazyFish + crab + skeleton + exFishAndShark && exFishAndShark != 0)
         {
             Transform spawnTransform = spawnLocations[Random.Range(0, activateSpawnLocations)];
-            Instantiate(exFishPrefab, spawnTransform);
-            StartCoroutine(SpawnShark(spawnTransform));
+            GameObject exhaustedFish = Instantiate(exFishPrefab, spawnTransform);
+            StartCoroutine(SpawnShark(spawnTransform, exhaustedFish));
         }
     }
 
-    IEnumerator SpawnShark(Transform spawnTransform)
+    IEnumerator SpawnShark(Transform spawnTransform, GameObject exhaustedFish)
     {
         yield return new WaitForSeconds(0.8f);
-        Instantiate(sharkPrefab, spawnTransform);
+        GameObject shark = Instantiate(sharkPrefab, spawnTransform);
+        shark.GetComponent<Shark>().SetPrey(exhaustedFish);
     }
 
     IEnumerator EndOfRound()

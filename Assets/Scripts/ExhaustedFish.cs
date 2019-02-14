@@ -7,8 +7,6 @@ public class ExhaustedFish : FallingObject
     public AudioSource reachLowerLimit;
     public AudioSource onClick;
 
-    private bool hunted;
-
     public override void Start()
     {
         base.Start();
@@ -43,15 +41,5 @@ public class ExhaustedFish : FallingObject
             onClick.Play();
             fallSpeed += 0.3f;
         }
-    }
-
-    public void SetHunted(bool _hunted)
-    {
-        hunted = _hunted;
-    }
-
-    public bool GetHunted()
-    {
-        return hunted;
     }
 }

@@ -56,21 +56,11 @@ public class MenyManager : MonoBehaviour {
     {
         switch (PlayerPrefs.GetString("WordOptions", "Letters"))
         {
-            case "Letters":
-                wordOptions.value = 0;
-                break;
-            case "Names":
-                wordOptions.value = 1;
-                break;
-            case "Colors":
-                wordOptions.value = 2;
-                break;
-            case "Animals":
-                wordOptions.value = 3;
-                break;
-            case "Custom Names":
-                wordOptions.value = 4;
-                break;
+            case "Letters": wordOptions.value = 0; break;
+            case "Names": wordOptions.value = 1; break;
+            case "Colors": wordOptions.value = 2; break;
+            case "Animals": wordOptions.value = 3; break;
+            case "Custom Names": wordOptions.value = 4; break;
         }
     }
 
@@ -91,12 +81,8 @@ public class MenyManager : MonoBehaviour {
                 ActivateSpecificNameObjects(true);
                 specificName.text = "Current Chosen Name: " + System.Environment.NewLine + PlayerPrefs.GetString("ChosenName", "-");
                 break;
-            case 2:
-                chosenOption = "Colors";
-                break;
-            case 3:
-                chosenOption = "Animals";
-                break;
+            case 2: chosenOption = "Colors"; break;
+            case 3: chosenOption = "Animals"; break;
             case 4:
                 chosenOption = "Custom Names";
                 ActivateCustomNamesObjects(true);
@@ -359,15 +345,9 @@ public class MenyManager : MonoBehaviour {
     {
         switch (PlayerPrefs.GetString("PlayMode", "Pratice"))
         {
-            case "Practice":
-                playModeOptions.value = 0;
-                break;
-            case "Campaign":
-                playModeOptions.value = 1;
-                break;
-            case "Endless":
-                playModeOptions.value = 2;
-                break;
+            case "Practice": playModeOptions.value = 0; break;
+            case "Campaign": playModeOptions.value = 1; break;
+            case "Endless": playModeOptions.value = 2; break;
         }
     }
 
