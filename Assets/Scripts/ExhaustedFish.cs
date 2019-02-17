@@ -7,6 +7,8 @@ public class ExhaustedFish : FallingObject
     public AudioSource reachLowerLimit;
     public AudioSource onClick;
 
+    private bool haveBeenScored;
+
     public override void Start()
     {
         base.Start();
@@ -30,7 +32,7 @@ public class ExhaustedFish : FallingObject
     {
         minSpeed = wordManager.minSpeed;
         maxSpeed = wordManager.maxSpeed;
-        scoreMatchPassed = wordManager.scoreCorrectPress;
+        scoreMatchPassed = wordManager.scoreMatchClicked;
     }
 
     public override void OnMouseDown()

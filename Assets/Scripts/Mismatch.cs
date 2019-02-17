@@ -2,9 +2,6 @@
 
 public class Mismatch : FallingObject
 {
-    [Header("Visual Effects")]
-    public ParticleSystem playOnDestory;
-
     [Header("Sound Effects")]
     public AudioSource onClick;
     public AudioSource reachLowerLimit;
@@ -25,10 +22,14 @@ public class Mismatch : FallingObject
         if (!haveBeenClicked)
         {
             wordManager.AdjustScore(scoreMisMatchPassed);
-            playOnDestory.Play();
             haveBeenClicked = true;
             objectText.text = "";
             reachLowerLimit.Play();
+            Destroy(gameObject, 2f);
+        }
+        else
+        {
+            objectText.text = "";
             Destroy(gameObject, 2f);
         }
     }
@@ -37,7 +38,7 @@ public class Mismatch : FallingObject
     {
         minSpeed = wordManager.minSpeed;
         maxSpeed = wordManager.maxSpeed;
-        scoreMisMatchClicked = wordManager.scoreIncorrectPress;
-        scoreMisMatchPassed = wordManager.scoreIncorrectPassed;
+        scoreMisMatchClicked = wordManager.scoreMisMatchClicked;
+        scoreMisMatchPassed = wordManager.scoreMisMatchPassed;
     }
 }

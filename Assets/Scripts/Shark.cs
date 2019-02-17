@@ -39,12 +39,11 @@ public class Shark : FallingObject
 
     public override void ReachedLowerLimit()
     {
-        if (haveBeenClickedThrice == false && haveBeenScored == false)
+        if (!haveBeenClickedThrice)
         {
             wordManager.AdjustScore(scoreMatchPassed);
             objectText.text = "";
             haveBeenClickedThrice = true;
-            haveBeenScored = true;
             reachLowerLimit.Play();
             visualEffect.Stop();
             Destroy(gameObject, 2f);
@@ -54,17 +53,16 @@ public class Shark : FallingObject
     public override void SetValuesFromWordManager()
     {
         maxSpeed = wordManager.maxSpeed;
-        scoreMatchPassed = wordManager.scoreCorrectPassed;
+        scoreMatchPassed = wordManager.scoreMatchPassed;
     }
 
     public override void OnMouseDown()
     {
         numberOfClicks++;
-        if (numberOfClicks == 3 && haveBeenClickedThrice == false)
+        if (numberOfClicks == 3 && !haveBeenClickedThrice)
         {
             objectText.text = "";
             haveBeenClickedThrice = true;
-            haveBeenScored = true;
             onClick.Play();
             visualEffect.Stop();
             Destroy(gameObject, 2f);

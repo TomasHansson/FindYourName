@@ -11,6 +11,8 @@ TagManager:
   - Crazy Fish
   - Shark
   - Exhausted Fish
+  - Match
+  - Mismatch
   layers:
   - Default
   - TransparentFX

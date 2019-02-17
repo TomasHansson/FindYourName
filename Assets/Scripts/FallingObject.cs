@@ -13,7 +13,6 @@ public abstract class FallingObject : MonoBehaviour
     protected int scoreMatchPassed;
 
     protected bool haveBeenClicked;
-    protected bool haveBeenScored;
 
     protected TextMeshProUGUI objectText;
     protected WordManager wordManager;

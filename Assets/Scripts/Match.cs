@@ -16,7 +16,6 @@ public class Match : FallingObject
             wordManager.AdjustScore(scoreMatchClicked);
             playOnDestory.Play();
             haveBeenClicked = true;
-            haveBeenScored = true;
             objectText.text = "";
             onClick.Play();
             Destroy(gameObject, 2f);
@@ -32,7 +31,6 @@ public class Match : FallingObject
             mainModule.startColor = Color.black;
             playOnDestory.Play();
             haveBeenClicked = true;
-            haveBeenScored = true;
             objectText.text = "";
             reachLowerLimit.Play();
             Destroy(gameObject, 2f);
@@ -43,8 +41,8 @@ public class Match : FallingObject
     {
         minSpeed = wordManager.minSpeed;
         maxSpeed = wordManager.maxSpeed;
-        scoreMatchClicked = wordManager.scoreCorrectPress;
-        scoreMatchPassed = wordManager.scoreCorrectPassed;
+        scoreMatchClicked = wordManager.scoreMatchClicked;
+        scoreMatchPassed = wordManager.scoreMatchPassed;
     }
 
     public bool GetHaveBeenClicked()

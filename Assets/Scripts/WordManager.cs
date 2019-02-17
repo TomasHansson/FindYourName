@@ -21,7 +21,8 @@ public class WordManager : MonoBehaviour {
     public TextMeshProUGUI currentNameText;
 
     [Header("Spawnable Prefabs")]
-    public GameObject namePrefab;
+    public GameObject matchPrefab;
+    public GameObject mismatchPrefab;
     public GameObject skeletonPrefab;
     public GameObject crabPrefab;
     public GameObject crazyFishPrefab;
@@ -38,10 +39,10 @@ public class WordManager : MonoBehaviour {
     public int levelNr;
     public float minSpeed;
     public float maxSpeed;
-    public int scoreCorrectPress;
-    public int scoreIncorrectPress;
-    public int scoreIncorrectPassed;
-    public int scoreCorrectPassed;
+    public int scoreMatchClicked;
+    public int scoreMisMatchClicked;
+    public int scoreMisMatchPassed;
+    public int scoreMatchPassed;
 
     [Header("Spawnrates in % (100 Total)")]
     public int match;
@@ -96,7 +97,7 @@ public class WordManager : MonoBehaviour {
         highScore = PlayerPrefs.GetInt("HighScoreLevel" + levelNr, 0);
         highScoreText.text = "Highscore: " + highScore;
         goalText.text = "Goal: " + goal;
-        scoreValuesText.text = "CM: " + scoreCorrectPress + " CMM: " + scoreIncorrectPress + " MMP: " + scoreIncorrectPassed + " MP: " + scoreCorrectPassed;
+        scoreValuesText.text = "CM: " + scoreMatchClicked + " CMM: " + scoreMisMatchClicked + " MMP: " + scoreMisMatchPassed + " MP: " + scoreMatchPassed;
         numberOfObjectsText.text = "Number of Objects: " + numberOfObjects;
         numberOfObjectsLeft = numberOfObjects;
         objectsLeftText.text = "Objects Left: " + numberOfObjectsLeft;
@@ -165,6 +166,7 @@ public class WordManager : MonoBehaviour {
     {
         if (itemsSpawned % 10 == 0)
         {
+            // Reset the random percentage of different types of falling objects and increase their speed every 10 items.
             match = Random.Range(30, 50);
             randomMismatch = Random.Range(15, 25);
             crazyFish = Random.Range(0 + spawnRateIncrease, 10 + spawnRateIncrease);
@@ -176,6 +178,7 @@ public class WordManager : MonoBehaviour {
         }
         if (itemsSpawned % 20 == 0 && itemsSpawned != 0 && spawnRateIncrease <= 5)
         {
+            // Increase the spawnrate of falling objects every 20 items, up to 5 times at 100 items spawned.
             CancelInvoke("AddObjectEndless");
             InvokeRepeating("AddObjectEndless", (1 - 0.1f * spawnRateIncrease), (1 - 0.1f * spawnRateIncrease));
             spawnRateIncrease++;
@@ -186,20 +189,17 @@ public class WordManager : MonoBehaviour {
 
     private void SpawnObject(int chance)
     {
-        string randomWord;
         if (chance < match && match != 0)
         {
             matches++;
-            randomWord = currentNameText.text;
-            GameObject newInstance = Instantiate(namePrefab, spawnLocations[Random.Range(0, activateSpawnLocations)]);
-            newInstance.GetComponent<TextMeshProUGUI>().text = randomWord;
+            GameObject newInstance = Instantiate(matchPrefab, spawnLocations[Random.Range(0, activateSpawnLocations)]);
+            newInstance.GetComponent<TextMeshProUGUI>().text = currentNameText.text;
         }
         else if (chance < match + randomMismatch && randomMismatch != 0)
         {
             mismatches++;
-            randomWord = words[Random.Range(0, words.Count)];
-            GameObject newInstance = Instantiate(namePrefab, spawnLocations[Random.Range(0, activateSpawnLocations)]);
-            newInstance.GetComponent<TextMeshProUGUI>().text = randomWord;
+            GameObject newInstance = Instantiate(mismatchPrefab, spawnLocations[Random.Range(0, activateSpawnLocations)]);
+            newInstance.GetComponent<TextMeshProUGUI>().text = words[Random.Range(0, words.Count)];
         }
         else if (chance < match + randomMismatch + crazyFish && crazyFish != 0)
             Instantiate(crazyFishPrefab, spawnLocations[Random.Range(0, activateSpawnLocations)]);

@@ -14,23 +14,22 @@ public class Crab : FallingObject
 
     public override void ReachedLowerLimit()
     {
-        if (haveBeenClicked == false && haveBeenScored == false)
+        if (!haveBeenClicked)
         {
             wordManager.AdjustScore(scoreMatchPassed);
             objectText.text = "";
             haveBeenClicked = true;
-            haveBeenScored = true;
             reachLowerLimit.Play();
             visualEffect.Stop();
             Destroy(gameObject, 2f);
-            IEnumerable<GameObject> activeMatches = GameObject.FindGameObjectsWithTag("Word").AsEnumerable();
+            IEnumerable<GameObject> activeMatches = GameObject.FindGameObjectsWithTag("Match").AsEnumerable();
             activeMatches = activeMatches.OrderBy(match => (match.transform.position - transform.position).sqrMagnitude);
             int matchesToRemove = 2;
             foreach (GameObject match in activeMatches)
             {
                 if (matchesToRemove == 0 || activeMatches.Count() == 0)
                     break;
-                if (match.GetComponent<Word>().GetHaveBeenClicked() == false && matchesToRemove > 0)
+                if (match.GetComponent<Match>().GetHaveBeenClicked() == false && matchesToRemove > 0)
                 {
                     Destroy(match);
                     matchesToRemove--;
@@ -43,8 +42,8 @@ public class Crab : FallingObject
     {
         minSpeed = wordManager.minSpeed;
         maxSpeed = wordManager.maxSpeed;
-        scoreMatchClicked = wordManager.scoreCorrectPress;
-        scoreMatchPassed = wordManager.scoreCorrectPassed;
+        scoreMatchClicked = wordManager.scoreMatchClicked;
+        scoreMatchPassed = wordManager.scoreMatchPassed;
     }
 
     public override void OnMouseDown()
@@ -54,7 +53,6 @@ public class Crab : FallingObject
             wordManager.AdjustScore(scoreMatchClicked);
             objectText.text = "";
             haveBeenClicked = true;
-            haveBeenScored = true;
             onClick.Play();
             visualEffect.Stop();
             Destroy(gameObject, 2f);
